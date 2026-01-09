@@ -47,7 +47,12 @@ def baked_goods_by_price():
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
-    return ''
+    baked_good = BakedGood.query.order_by(BakedGood.price.desc()).first()
+
+    if not baked_good:
+        return jsonify({"error": "No baked goods found"}), 404
+
+    return jsonify(baked_good.to_dict()), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
