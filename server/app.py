@@ -41,7 +41,9 @@ def bakery_by_id(id):
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
-    return ''
+    baked_goods = BakedGood.query.order_by(BakedGood.price.desc()).all()
+    return jsonify([bg.to_dict() for bg in baked_goods]), 200
+
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
