@@ -20,11 +20,24 @@ def index():
 
 @app.route('/bakeries')
 def bakeries():
-    return ''
+
+    bakeries = Bakery.query.all()
+    return jsonify([bakery.to_dict() for bakery in bakeries]), 200
+    
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
-    return ''
+    bakery = Bakery.query.get(id)
+
+    if not bakery:
+        return jsonify({"error": "Bakery not found"}), 404
+
+    bakery_dict = bakery.to_dict()
+    bakery_dict["baked_goods"] = [
+        baked_good.to_dict() for baked_good in bakery.baked_goods
+    ]
+
+    return jsonify(bakery_dict), 200
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
